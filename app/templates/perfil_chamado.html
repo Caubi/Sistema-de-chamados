@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+Perfil do Chamado
+{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <img src="{{maquina.foto_capa.url}}" style="width:100%">
+            <div class="caption">
+            </div>
+        <div class="btn btn-info">Voltar
+           <a href="{% url 'listar_maquina' %}">
+
+            </a>
+        </div>
+        </div>
+    </div>
+
+      <div class="col-md-5">
+            <ul class="list-group">
+                <li class="list-group-item">Chamado: {{chamado}}</li>
+                <li class="list-group-item">Data de abertura: {{chamado.}}</li>
+                <li class="list-group-item">Protocolo: {{chamado.protocolo}}</li>
+                <li class="list-group-item">Responsável: {{maquina.tecnico.nome}}</li>
+                <li class="list-group-item">Data de fechamento: {{chamado.date_saida}}</li>
+            </ul>
+      </div>
+</div>
+{% endblock content %}

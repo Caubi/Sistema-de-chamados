@@ -1,0 +1,20 @@
+{% extends 'base.html '%} <!-- Classe herdada -->
+
+{% block title %} <!-- Classe herdada para o título -->
+Remoção de máquinas
+{% endblock title %}
+
+{% block tituloPagina %} <!-- Classe herdada para o título da página -->
+Remoção de Máquinas
+{% endblock tituloPagina %}
+
+{% block content %} <!-- AKI COMEÇA O CÓDIGO -->
+<form method="post">{% csrf_token %}
+    <h4>Tem certeza que deseja excluir esta máquina ?</h4>
+    <br/>
+<button type="submit" class="btn btn-primary">
+    Remover
+</button>
+</form>
+
+{% endblock content %} <!-- AKI TERMINA O CÓDIGO -->
