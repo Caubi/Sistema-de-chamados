@@ -8,19 +8,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def listar_maquina(request, template_name="maquinas_list.html"):
 
     query = request.GET.get("busca", '')# Armazena na variável query onde vamos obter os dados do parâmetro busca que está em 'maquina_lit.html' se não tiver nada ele retorna vazio ''
-    # page = request.GET.get('page', '')
-    # ordenar = request.GET.get("ordenar", '')
+    page = request.GET.get('page', '')
+    #ordenar = request.GET.get("ordenar", '')
 
     if query: # Se encontrar alguma coisa nessa query, no caso se tiver algum valor significa que precisamos buscar a máquina por um determinado modelo
         maquina = Maquina.objects.filter(num_serie__icontains=query) # Buscar as máquinas de acordo com seu modelo que contém o modelo que enviamos lá no parâmetro busca do noso template. o i de icontains é pra definir que a busca é case insensitive e o contains é que não precisamos digitar o nome completo
-    else: # Senão se agente não tem nenhum valor na variável query significa que não estamos fazendo nenhuma busca
-        maquina = Maquina.objects.all() # Com isso ele retorna todas os objetos ou seja todas as  máquinas
-    maquinas = {'lista': maquina} # Armazenamos todas as máquinas em uma variável dentro de uma lista apelidamos a variável de 'máquinas'
+    else:
+        try:# Senão se agente não tem nenhum valor na variável query significa que não estamos fazendo nenhuma busca
+            maquina = Maquina.objects.all() # Com isso ele retorna todas os objetos ou seja todas as  máquinas
+            maquina = Paginator(maquina, 6)
+            maquina = maquina.page(page)
+        except PageNotAnInteger:
+            maquina = maquina.page(1)
+        except EmptyPage:
+            maquina = paginator.page(paginator.num_pages)
+    maquinas = {
+        'lista': maquina}  # Armazenamos todas as máquinas em uma variável dentro de uma lista apelidamos a variável de 'máquinas'
     return render(request, template_name, maquinas) # Renderizar as informações para o nosso template
 
 
