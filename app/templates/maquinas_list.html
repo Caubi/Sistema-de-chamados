@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+Listagem das máquinas
+{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <form method="get">
+        <div class="span12">
+            <div class="input-group">
+                <input type="text" class="form-control" name="busca" placeholder="Buscar Máquina">
+                <span class="input-group-btn">
+                        <button class="btn btn-info" type="submit">Pesquisar</button>
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
+<br>
+<!--AKI COMEÇA OA FILTRO -->
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <div class="menu">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Filtro</h3>
+                    </div>
+                </div>
+                <!--AKI COMEÇA OS BOTÕES -->
+                <div class="row-fluid" id="btn-item">
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="button-item" data-toggle="dropdown">
+                                Modelo
+                                <span class="caret"></span>
+                            </button>
+
+                            <ul class="dropdown-menu" role="menu">
+
+                                <li role="presentation ">
+                                    <a href="#" role="menuitem" data-value="button-item" class="item-select" value="U900">U900</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-value="button-item" class="item-select" value="U950">U950</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-value="button-item" class="item-select" value="U1500">U1500</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-value="button-item" class="item-select" value="U2500">U2500</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="button-item1" data-toggle="dropdown">
+                                Fornecedor
+                                <span class="caret"></span>
+                            </button>
+
+                            <ul class="dropdown-menu" role="menu">
+
+                                <li role="presentation ">
+                                    <a href="#" role="menuitem" class="item-select" data-value="button-item1" value="Parceiro">Parceiro</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" class="item-select" data-value="button-item1" value="Empresa">Empresa</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="button-item2" data-toggle="dropdown">
+                                Status chamado
+                                <span class="caret"></span>
+                            </button>
+
+                            <ul class="dropdown-menu" role="menu">
+
+                                <li role="presentation ">
+                                    <a href="#" role="menuitem" class="item-select" data-value="button-item2" value="Aberto">Aberto</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" class="item-select" data-value="button-item2" value="Pendente">Pendente</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" class="item-select" data-value="button-item2" value="Fechado">Fechado</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="button-item3" data-toggle="dropdown">
+                                Número de série
+                                <span class="caret"></span>
+                            </button>
+
+                            <ul class="dropdown-menu" role="menu">
+
+                                <li role="presentation ">
+                                    <a href="#" role="menuitem" data-value="button-item3" class="item-select" value="1AD">1AD</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-value="button-item3" class="item-select" value="1AC">1AC</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-value="button-item3" class="item-select" value="4AD">4AD</a>
+                                </li>
+                            </ul>
+                        </div>
+                </div>
+                <!--AKI ENCERRA OS BOTÕES -->
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<br>
+
+<div class="row">
+    {%for maquina in lista %}
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <a href="{% url 'perfil_maquina' pk=maquina.pk %}">
+                {% if maquina.modelo == 'U900' %}
+                    {% load static %}
+                    <img src="{% static 'app/U900.png' %}" style="width:40%"/>
+                {% elif maquina.modelo == 'U950' %}
+                    <img src="{% static 'app/U950.png' %}" style="width:40%"/>
+                {% elif maquina.modelo == 'U1500' %}
+                    <img src="{% static 'app/U1500.png' %}" style="width:40%"/>
+                {% elif maquina.modelo == 'U2500' %}
+                    <img src="{% static 'app/U2500.png' %}" style="width:40%"/>
+                {% endif %}
+                <div align="center">
+                    <div class="caption">
+                        <p class="">{{maquina.modelo}} - {{maquina.num_serie}} - {{maquina.patrimonio}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+    <a class="btn-floating btn-large waves-effect waves-light red" href="{% url 'maquina_new' %}"><i class="material-icons">add</i></a>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if lista.has_previous %}
+            <a href="?page={{ lista.previous_page_number }}">anterior</a>
+        {% endif %}
+
+        <span class="current">
+            Página {{ lista.number }} de {{ lista.paginator.num_pages }}.
+        </span>
+
+        {% if lista.has_next %}
+            <a href="?page={{ lista.next_page_number }}">proxima</a>
+        {% endif %}
+    </span>
+</div>
+<script>
+
+$(document).ready(function(){
+     $('.item-select').click(function(){
+         $("#"+$(this).attr("data-value")).html("")
+         $("#"+$(this).attr("data-value")).append($(this).attr("value")+"<span class='caret'></span>")
+     });
+
+});
+
+</script>
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load material_form %}
+{% block title %}
+Cadastro de máquinas
+{% endblock title %}
+
+{% block tituloPagina %}
+Cadastro de Máquinas
+{% endblock tituloPagina %}
+
+{% block content %}
+
+ <form method="post">
+     {% csrf_token %}
+   {% form form=form %}{% endform %} <!-- Definindo nosso form com formato bootstrap -->
+   <button type="submit" class="btn btn-primary">
+     Salvar
+    </button>
+ </form>
+
+{% endblock content %}

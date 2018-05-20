@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <!-- define a viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    {% load static %}
+
+    <!-- adicionar JS Jquery -->
+    <script src="{% static 'app/js/jquery-1.11.1.min.js' %}"></script>
+    <script src="{% static 'app/js/jquery.formset.js' %}"></script>
+
+    <!-- adicionar CSS Bootstrap -->
+    <link href="{% static 'app/css/bootstrap.min.css?' %}" rel="stylesheet" media="all">
+
+    <!-- css personalizado -->
+    <link href="{% static 'app/css/style.css?' %}" rel="stylesheet" media="all">
+
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    {% include 'material/includes/material_css.html' %}
+    <script src="{% static 'material/js/jquery.js' %}"></script>
+    {% include 'material/includes/material_js.html' %}
+</head>
+{% if request.user.is_authenticated %}
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand">Máquinas Usadas</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'listar_maquina'%}">Máquinas</a></li>
+                <li><a href="{% url 'listar_chamado'%}">Chamados</a></li>
+            </ul>
+            <ul class="nav navbar-nav right hide-on-med-and-down">
+                <li>
+                    {% if request.user.is_authenticated %}
+                    <!-- Se este usuário estiver autenticado mostramos a mensagem Olá o nome do usuário e o botão de logout  -->
+                <li class="navbar-brand">Olá, {{ request.user.username }}</li>
+                <li><a href="{% url 'deslogar' %}">Logout</a></li>
+                    {% endif %}
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+
+</nav>
+<div class="container">
+    {% block content %}
+
+    {% endblock %}
+</div>
+<script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+</body>
+{% else %}
+<h5> Ei macho você precisa estar logado para acessar essa rota </h5>
+<div class="btn btn-info">
+    <a href="{% url 'logar' %}">Login</a>
+</div>
+{% endif %}
+</html>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+Perfil da Máquina
+{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            {% load static %}
+            {% if maquina.modelo == 'U900' %}
+                <img src="{% static 'app/U900.png' %}"style="width:100%"/>
+            {% elif maquina.modelo == 'U950' %}
+                <img src="{% static 'app/U950.png' %}"style="width:100%"/>
+            {% elif maquina.modelo == 'U1500' %}
+                <img src="{% static 'app/U1500.png' %}" style="width:100%"/>
+            {% elif maquina.modelo == 'U2500' %}
+                <img src="{% static 'app/U2500.png' %}" style="width:100%"/>
+            {% endif %}
+            <div class="caption">
+            </div>
+
+            <div class="btn btn-info">
+               <a href="{% url 'maquina_edit' pk=maquina.pk %}"><i class="material-icons">mode_edit</i></a>
+            </div>
+            <div class="btn btn-info">
+               <a href="{% url 'maquina_remove' pk=maquina.pk %}"><i class="material-icons">delete</i></a>
+            </div>
+            <div class="btn btn-info">
+               <a href="{{ request.META.HTTP_REFERER }}">Voltar</a>
+            </div>
+
+        </div>
+    </div>
+
+      <div class="col-md-5">
+            <ul class="list-group">
+                <li class="list-group-item">Modelo: {{maquina.modelo}}</li>
+                <li class="list-group-item">Patrimônio: {{maquina.patrimonio}}</li>
+                <li class="list-group-item">Número de série: {{maquina.num_serie}}</li>
+                <li class="list-group-item">Defeito: {{maquina.estado}}</li>
+                <li class="list-group-item">ID - Chamado: {{maquina.ID_chamado}}</li>
+                <li class="list-group-item">Técnico: {{maquina.tecnico.nome}}</li>
+                <li class="list-group-item">Cpf: {{maquina.tecnico.cpf}}</li>
+                <li class="list-group-item">Matrícula: {{maquina.tecnico.matricula}}</li>
+             </ul>
+      </div>
+</div>
+{% endblock content %}
