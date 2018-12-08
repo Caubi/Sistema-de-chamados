@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load material_form %}
 {% block title %}
-Cadastro de máquinas
+Cadastro de chamádos
 {% endblock title %}
 
 {% block tituloPagina %}
-Cadastro de Máquinas
+Cadastro de Chamados
 {% endblock tituloPagina %}
 
 {% block content %}
@@ -17,10 +17,11 @@ Cadastro de Máquinas
      Salvar
     </button>
      <div class="btn btn-info">
-         <a href="{{ request.META.HTTP_REFERER }}"><span class="glyphicon glyphicon-ban-circle"aria-hidden="true"></span></a>
+         <a href="{% url 'maquina_new' %}"><span class="glyphicon glyphicon-th-large"></span></a>
+     </div>
+     <div class="btn btn-info">
+        <a href="{{ request.META.HTTP_REFERER }}"><span class="glyphicon glyphicon-ban-circle"aria-hidden="true"></span></a>
      </div>
  </form>
 
 {% endblock content %}
-
-

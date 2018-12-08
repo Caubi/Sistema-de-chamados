@@ -5,7 +5,6 @@
 Listagem de Chamados
 {% endblock title %}
 {% block content %}
-{% load material_form %}
 
 <div class="row">
 <form method="get">
@@ -46,6 +45,8 @@ Listagem de Chamados
                             <th class="text-center">Data de abertura</th>
                             <th class="text-center">Número do chamado</th>
                             <th class="text-center">Status do chamado</th>
+                            <th class="text-center"></th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                         <tbody>
@@ -54,15 +55,16 @@ Listagem de Chamados
                                     <td class="text-center">{{chamado.date_entrada}}</td>
                                     <td class="text-center">{{chamado.num_chamado}}</td>
                                     <td class="text-center">{{chamado.status_chamado}}
+                                    <td class="text-center">
+                                    <a href="{% url 'chamado_edit' pk=chamado.pk %}"><i class="material-icons">mode_edit</i></a>
+                                    </td>
+                                    <td class="text-center">
                                         {% if chamado.status_chamado == 'FECHADO' %}
-                                            {% load static %}
-                                            <ul class="nav navbar-nav right hide-on-med-and-down">
-                                                <img src="{% static 'app/ok.png' %}"/>
-                                            </ul>
+                                            <span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true"></span>
+                                        {% elif chamado.status_chamado == 'ABERTO' %}
+                                            <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"style="color:red"></span>
                                         {% else %}
-                                            <ul class="nav navbar-nav right hide-on-med-and-down">
-                                                <img src="{% static 'app/fechado.png' %}"/>
-                                            </ul>
+                                            <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"style="color:orange"></span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -70,7 +72,11 @@ Listagem de Chamados
                         </tbody>
                 </table>
     </div>
+<a id="button-chamado" class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'chamado_new' %}"><i class="material-icons">add</i></a>
 </div>
+
+
+
 <div class="pagination">
     <span class="step-links">
         {% if lista.has_previous %}
@@ -85,5 +91,5 @@ Listagem de Chamados
             <a href="?page={{ lista.next_page_number }}">proxima</a>
         {% endif %}
     </span>
-  </div>
+</div>
 {% endblock content %}

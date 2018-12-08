@@ -4,12 +4,9 @@ from django.forms import ModelForm
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
 
 def listar_maquina(request, template_name="maquinas_list.html"):
 
@@ -32,38 +29,9 @@ def listar_maquina(request, template_name="maquinas_list.html"):
         'lista': maquina}  # Armazenamos todas as máquinas em uma variável dentro de uma lista apelidamos a variável de 'máquinas'
     return render(request, template_name, maquinas) # Renderizar as informações para o nosso template
 
-
-
-
-    # Senao se cliclar somente no botão de buscar ele vai exibir todos os registros
-    # Vai mostrar 3 maquinas por pagina, e vai chamar a paginação
-
-
-    #else:
-    #    try:
-    #       if categoria != "Todos":
-    #           if ordenar:
-    #               maquina = Maquina.objects.filter(tipo=categoria).order_by(ordenar)
-    #               else:
-    #               maquina = Maquina.objects.filter(tipo=categoria)
-#           else:
-#if ordenar:
-                    #maquina = Maquina.objects.all().order_by(ordenar)
-                    #            else:
-    #               maquina = Maquina.objects.all()
-                    #           maquina = Paginator(maquina, 3)
-#          maquina = maquina.page(page)
-#       # Excessão caso a página não for um inteiro ela volta pra página inicial um
- #       except PageNotAnInteger:
-#           maquina = maquina.page(1)
-        # Excessão caso a página seja nulo vazia ela retorna o número de páginas disponíveis pra utilização
-#       except EmptyPage:
-#           maquina = paginator.page(paginator.num_pages)
-#   maquinas = {'lista': maquina}
-#return render(request, template_name, maquinas)
-
 def listar_chamado(request, template_name="chamados_list.html"):
     query = request.GET.get("busca",'')
+    page = request.GET.get('page', '')
     ordenar = request.GET.get("ordenar",'')
     if query:
         chamado = Chamado.objects.filter(num_chamado__icontains=query)
@@ -72,6 +40,13 @@ def listar_chamado(request, template_name="chamados_list.html"):
             chamado = Chamado.objects.all().order_by(ordenar)
         else:
             chamado = Chamado.objects.all()
+    try:
+        chamado = Paginator(chamado, 5)
+        chamado = chamado.page(page)
+    except PageNotAnInteger:
+        chamado = chamado.page(1)
+    except EmptyPage:
+        chamado = paginator.page(paginator.num_pages)
     chamados = {'lista': chamado}
     return render(request, template_name, chamados)
 
@@ -109,16 +84,33 @@ def deslogar(request):
     logout(request)
     return HttpResponseRedirect(settings.LOGIN_URL)
 
-class MaquinaForm(ModelForm): # Nossos atributos do Livro armazenados do banco de dados
+class MaquinaForm(ModelForm): # Nossos atributos da Máquina armazenados do banco de dados
     class Meta:
         model = Maquina
         fields = ['modelo', 'estado', 'patrimonio', 'num_serie', 'ID_chamado', 'tecnico'] # Tem que ser igual na view
+
+class ChamadoForm(ModelForm): # Nossos atributos do Chamado armazenados do banco de dados
+    class Meta:
+        model = Chamado
+        fields = ['date_saida', 'status_chamado', 'tecnico'] # Tem que ser igual na view
+
+class ChamadoForm_New(ModelForm): # Nossos atributos do Chamado armazenados do banco de dados
+    class Meta:
+        model = Chamado
+        fields = ['num_chamado','protocolo','date_entrada','date_saida', 'status_chamado', 'tecnico', 'maquina'] # Tem que ser igual na view
 
 def maquina_new(request, template_name='maquina_form.html'):
     form = MaquinaForm(request.POST or None)# Guardar o tipo de formulário na variável form, e ela vai ser uma request do tipo POST
     if form.is_valid(): # Verifica se este formulário é válido
         form.save() # Salva no banco de dados
         return redirect('listar_maquina') # Redireciona para a nossa tela de listagem de livros que é a nossa view definida nas url´s
+    return render(request, template_name, {'form': form}) #Retorna renderizando passando o request o nosso template_name e a nossa variável form
+
+def chamado_new(request, template_name='chamado_form.html'):
+    form = ChamadoForm_New(request.POST or None)# Guardar o tipo de formulário na variável form, e ela vai ser uma request do tipo POST
+    if form.is_valid(): # Verifica se este formulário é válido
+        form.save() # Salva no banco de dados
+        return redirect('listar_chamado') # Redireciona para a nossa tela de listagem de livros que é a nossa view definida nas url´s
     return render(request, template_name, {'form': form}) #Retorna renderizando passando o request o nosso template_name e a nossa variável form
 
 def maquina_remove(request, pk): # Vai passar a request e um pimary key, e essa pk faremos uma consulta no nosso banco pra pegar esse maquina
@@ -138,5 +130,28 @@ def maquina_edit(request, pk, template_name='maquina_form.html'): # Passa a requ
     else:
         form = MaquinaForm(instance=maquina)
     return render(request, template_name, {'form': form}) # Ele renderizar passando uma request o nosso template name, e nossa variável form
+
+def chamado_edit(request, pk, template_name='chamado_form.html'): # Passa a request, depois passa a primary key, e nosso template
+    chamado = get_object_or_404(Chamado, pk=pk) # Aki faz a captura do livro, o "get_object_or_404" Ou ela pega o livro corretamente o ela dispara o erro 404
+    if request.method == "POST": # Se o request for POST....
+        form = ChamadoForm(request.POST, instance=chamado) #..... Ele vai salvar no nosso form o nosso LivroForm, passando a requisição do tipo POST, e pegando a nossa instância do livro
+        if form.is_valid(): # Testa se o formulário é válido....
+            chamado = form.save() #... Se for ele vai salvar o formulário
+            return redirect('listar_chamado') #.. E redirecionar para nossa listagem de livros
+    else:
+        form = ChamadoForm(instance=chamado)
+    return render(request, template_name, {'form': form}) # Ele renderizar passando uma request o nosso template name, e nossa variável form
+
+
+
+
+
+
+
+def chamado_status(request, pk):
+    chamado = get_object_or_404(Chamado, pk=pk)
+    if request.method == "POST":
+        chamado.status_chamado(request.POST, instance=chamado)
+
 
 

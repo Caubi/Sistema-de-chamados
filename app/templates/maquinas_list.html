@@ -4,11 +4,11 @@
 {% block title %}
 Listagem das máquinas
 {% endblock title %}
-
 {% block content %}
+
 <div class="row">
     <form method="get">
-        <div class="span12">
+        <div class="col-lg-12">
             <div class="input-group">
                 <input type="text" class="form-control" name="busca" placeholder="Buscar Máquina">
                 <span class="input-group-btn">
@@ -17,12 +17,12 @@ Listagem das máquinas
             </div>
         </div>
     </form>
-</div>
+</div> <!--Botão de pesquisa -->
 <br>
 <!--AKI COMEÇA OA FILTRO -->
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="col-md-12">
+        <div class="col-sm-8 col-md-8 col-lg-12">
             <div class="menu">
                 <div class="panel panel-default ">
                     <div class="panel-heading">
@@ -128,13 +128,13 @@ Listagem das máquinas
             <a href="{% url 'perfil_maquina' pk=maquina.pk %}">
                 {% if maquina.modelo == 'U900' %}
                     {% load static %}
-                    <img src="{% static 'app/U900.png' %}" style="width:40%"/>
+                    <img src="{% static 'app/img/U900.png' %}" style="width:40%"/>
                 {% elif maquina.modelo == 'U950' %}
-                    <img src="{% static 'app/U950.png' %}" style="width:40%"/>
+                    <img src="{% static 'app/img/U950.png' %}" style="width:40%"/>
                 {% elif maquina.modelo == 'U1500' %}
-                    <img src="{% static 'app/U1500.png' %}" style="width:40%"/>
+                    <img src="{% static 'app/img/U1500.png' %}" style="width:40%"/>
                 {% elif maquina.modelo == 'U2500' %}
-                    <img src="{% static 'app/U2500.png' %}" style="width:40%"/>
+                    <img src="{% static 'app/img/U2500.png' %}" style="width:40%"/>
                 {% endif %}
                 <div align="center">
                     <div class="caption">
@@ -147,7 +147,7 @@ Listagem das máquinas
     {% endfor %}
 </div>
 
-    <a class="btn-floating btn-large waves-effect waves-light red" href="{% url 'maquina_new' %}"><i class="material-icons">add</i></a>
+    <a id="button-maquina" class="btn-floating btn-large waves-effect waves-light red" href="{% url 'maquina_new' %}"><i class="material-icons">add</i></a>
 
 <div class="pagination">
     <span class="step-links">

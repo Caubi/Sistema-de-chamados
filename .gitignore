@@ -1,0 +1,17 @@
+.idea
+_pycache_/*
+_pycache_/
+migrations/*
+migrations/
+static/*
+static/
+templatetags/
+_init_.py
+modules.py
+tests.py
+venv/
+db.sqlite3
+manage.py
+Relatorio_Tecnico_Final/
+
+

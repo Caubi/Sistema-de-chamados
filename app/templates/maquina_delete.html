@@ -1,12 +1,8 @@
-{% extends 'base.html '%} <!-- Classe herdada -->
-
-{% block title %} <!-- Classe herdada para o título -->
+{% extends 'base.html '%}
+{% block title %}
 Remoção de máquinas
 {% endblock title %}
 
-{% block tituloPagina %} <!-- Classe herdada para o título da página -->
-Remoção de Máquinas
-{% endblock tituloPagina %}
 
 {% block content %} <!-- AKI COMEÇA O CÓDIGO -->
 <form method="post">{% csrf_token %}
@@ -15,6 +11,9 @@ Remoção de Máquinas
 <button type="submit" class="btn btn-primary">
     Remover
 </button>
+    <div class="btn btn-info">
+        <a href="{{ request.META.HTTP_REFERER }}"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></a>
+    </div>
 </form>
 
 {% endblock content %} <!-- AKI TERMINA O CÓDIGO -->

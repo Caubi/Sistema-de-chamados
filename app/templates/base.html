@@ -6,20 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     {% load static %}
-
     <!-- adicionar JS Jquery -->
     <script src="{% static 'app/js/jquery-1.11.1.min.js' %}"></script>
     <script src="{% static 'app/js/jquery.formset.js' %}"></script>
-
     <!-- adicionar CSS Bootstrap -->
     <link href="{% static 'app/css/bootstrap.min.css?' %}" rel="stylesheet" media="all">
-
     <!-- css personalizado -->
-    <link href="{% static 'app/css/style.css?' %}" rel="stylesheet" media="all">
+    <link href="{% static 'app/css/style.css???' %}" rel="stylesheet" media="all">
 
     <meta charset="UTF-8">
     <title>
         {% block title %}
+        <!-- Aqui se insere o título da página -->
         {% endblock %}
     </title>
     {% include 'material/includes/material_css.html' %}
@@ -28,6 +26,7 @@
 </head>
 {% if request.user.is_authenticated %}
 <body>
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -54,6 +53,7 @@
     </div><!-- /.container-fluid -->
 
 </nav>
+
 <div class="container">
     {% block content %}
 
@@ -63,9 +63,11 @@
 <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
 </body>
 {% else %}
-<h5> Ei macho você precisa estar logado para acessar essa rota </h5>
+<h5> Você precisa estar logado para acessar essa rota </h5>
 <div class="btn btn-info">
     <a href="{% url 'logar' %}">Login</a>
 </div>
 {% endif %}
 </html>
+
+
